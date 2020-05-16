@@ -9,10 +9,9 @@
 </div>
 
 <div>
-    <h5 class="font-bold mb-4">John Doe</h5>
+    <h5 class="font-bold mb-4">{{$tweet->user->name}}</h5>
     <p class="text-sm">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptates, maiores cum. Iure, consectetur perspiciatis! Nostrum eum inventore ullam modi corrupti illum accusamus qui laboriosam placeat voluptatibus? Hic voluptatibus eius mollitia.
-
+        {!! nl2br(e($tweet->body)) !!}
     </p>
 </div>
 </div>
