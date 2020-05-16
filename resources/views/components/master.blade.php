@@ -29,12 +29,7 @@
                 </h1>
             </header>
         </section>
-
-        <section class="px-8">
-        <main class="container mx-auto">
-            @yield('content')
-        </main>
-        </section>
     </div>
+    {{$slot}}
 </body>
 </html>

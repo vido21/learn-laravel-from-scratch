@@ -7,16 +7,14 @@ use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    use Notifiable;
+    use Notifiable,Followable;
 
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
-    protected $fillable = [
-        'name', 'email', 'password',
-    ];
+    protected $guarded = [];
 
     /**
      * The attributes that should be hidden for arrays.
@@ -36,9 +34,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function follow(User $user)
+    public function getAvatarAttribute($value)
     {
-        return $this->follows()->save($user);
+        return asset('storage/'.$value);
     }
 
     public function timeline()
@@ -51,13 +49,19 @@ class User extends Authenticatable
         return $tweets;
     }
 
-    public function follows()
-    {
-        return $this->belongsToMany(User::class, 'follows', 'user_id', 'following_user_id');
-    }
-
     public function tweets()
     {
         return $this->hasMany(Tweet::class);
+    }
+
+    public function getRouteKeyName()
+    {
+        return 'username';
+    }
+
+    public function path($append = '')
+    {
+        $path = route('profile.show', $this->username);
+        return $append ? "{$path}/{$append}" : $path;
     }
 }

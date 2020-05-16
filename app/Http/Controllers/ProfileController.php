@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Tweet;
+use App\User;
+use Illuminate\Validation\Rule;
 use Illuminate\Http\Request;
 
-class TweetController extends Controller
+class ProfileController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -14,9 +15,7 @@ class TweetController extends Controller
      */
     public function index()
     {
-        $tweets = current_user()->timeline();
-
-        return view('tweets.index', compact('tweets'));
+        //
     }
 
     /**
@@ -37,58 +36,62 @@ class TweetController extends Controller
      */
     public function store(Request $request)
     {
-        $attributes = request()->validate([
-            'body' => 'required|max:255'
-        ]);
-        Tweet::create([
-            'user_id' => auth()->id(),
-            'body' => $attributes['body'],
-        ]);
-
-        return back();
+        //
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Tweet  $tweet
+     * @param  \App\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function show(Tweet $tweet)
+    public function show(User $user)
     {
-        //
+        return view('profile.show', compact('user'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Tweet  $tweet
+     * @param  \App\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function edit(Tweet $tweet)
+    public function edit(User $user)
     {
-        //
+        //$this->authorize('edit',$user);
+        return view('profile.edit',compact('user'));
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Tweet  $tweet
+     * @param  \App\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Tweet $tweet)
+    public function update(Request $request, User $user)
     {
-        //
+        $attributes=$request->validate([
+            'username' => ['required', 'string', 'max:255',Rule::unique('users')->ignore($user),'alpha_dash'],
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user)],
+            'password' => ['required', 'string', 'min:8', 'confirmed','max:256'],
+            'avatar' => ['required','file']
+        ]);
+
+        $attributes['avatar']=$request->avatar->store('avatars');
+        $user->update($attributes);
+        
+        return redirect($user->path());
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Tweet  $tweet
+     * @param  \App\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Tweet $tweet)
+    public function destroy(User $user)
     {
         //
     }

@@ -23,7 +23,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $tweets = Tweet::find(auth()->user()->follows);
+        $tweets = Tweet::find(current_user()->follows);
 
         return view('home', compact('tweets'));
     }
