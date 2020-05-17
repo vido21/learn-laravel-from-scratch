@@ -36,7 +36,16 @@ class User extends Authenticatable
 
     public function getAvatarAttribute($value)
     {
-        return asset('storage/'.$value);
+        if ($value) {
+            return asset('storage/' . $value) ;
+        } else {
+            return 'storage/avatars/tqDdi4fLiJwVAYiBviuCNYErtUO7FwSgTEHA56fF.jpeg';
+        }
+    }
+
+    public function setPasswordAttribute($value)
+    {
+        $this->attributes['password'] = bcrypt($value);
     }
 
     public function timeline()
@@ -44,8 +53,9 @@ class User extends Authenticatable
         $friends = $this->follows()->pluck('id');
         $tweets = Tweet::whereIn('user_id', $friends)
                 ->orWhere('user_id', $this->id)
+                ->withLikes()
                 ->latest()
-                ->get();
+                ->paginate(1);
         return $tweets;
     }
 
@@ -63,5 +73,10 @@ class User extends Authenticatable
     {
         $path = route('profile.show', $this->username);
         return $append ? "{$path}/{$append}" : $path;
+    }
+
+    public function likes()
+    {
+        return $this->belongsToMany(Tweet::class, 'likes');
     }
 }

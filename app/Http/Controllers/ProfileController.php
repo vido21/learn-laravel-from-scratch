@@ -47,7 +47,13 @@ class ProfileController extends Controller
      */
     public function show(User $user)
     {
-        return view('profile.show', compact('user'));
+        return view('profile.show', [
+            'user' => $user,
+            'tweets' => $user
+                    ->tweets()
+                    ->withLikes()
+                    ->paginate(3)
+        ]);
     }
 
     /**
@@ -59,7 +65,7 @@ class ProfileController extends Controller
     public function edit(User $user)
     {
         //$this->authorize('edit',$user);
-        return view('profile.edit',compact('user'));
+        return view('profile.edit', compact('user'));
     }
 
     /**
@@ -71,17 +77,22 @@ class ProfileController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        $attributes=$request->validate([
-            'username' => ['required', 'string', 'max:255',Rule::unique('users')->ignore($user),'alpha_dash'],
+        $attributes = $request->validate([
+            'username' => ['required', 'string', 'max:255', Rule::unique('users')->ignore($user), 'alpha_dash'],
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user)],
-            'password' => ['required', 'string', 'min:8', 'confirmed','max:256'],
-            'avatar' => ['required','file']
+            'password' => ['string', 'min:8', 'confirmed', 'max:256'],
+            'avatar' => ['file']
         ]);
 
-        $attributes['avatar']=$request->avatar->store('avatars');
+        if ($request->has('avatar')) {
+            $attributes['avatar'] = $request->avatar->store('avatars');
+        }
+        // if (!empty($request->password)) {
+        //     $attributes['password'] = $request->password;
+        // }
         $user->update($attributes);
-        
+
         return redirect($user->path());
     }
 

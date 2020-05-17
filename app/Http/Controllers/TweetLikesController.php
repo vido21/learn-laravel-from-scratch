@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
+use App\Tweet;
 use Illuminate\Http\Request;
 
-class FollowController extends Controller
+class TweetLikesController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -30,22 +30,22 @@ class FollowController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \App\User  $user
+     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(User $user)
+    public function store(Tweet $tweet)
     {
-        current_user()->toggleFollow($user);
+        $tweet->like(current_user());
         return back();
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\User  $user
+     * @param  \App\Tweet  $tweet
      * @return \Illuminate\Http\Response
      */
-    public function show(User $user)
+    public function show(Tweet $tweet)
     {
         //
     }
@@ -53,10 +53,10 @@ class FollowController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\User  $user
+     * @param  \App\Tweet  $tweet
      * @return \Illuminate\Http\Response
      */
-    public function edit(User $user)
+    public function edit(Tweet $tweet)
     {
         //
     }
@@ -65,10 +65,10 @@ class FollowController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\User  $user
+     * @param  \App\Tweet  $tweet
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request, Tweet $tweet)
     {
         //
     }
@@ -76,11 +76,12 @@ class FollowController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\User  $user
+     * @param  \App\Tweet  $tweet
      * @return \Illuminate\Http\Response
      */
-    public function destroy(User $user)
+    public function destroy(Tweet $tweet)
     {
-        //
+        $tweet->dislike(current_user());
+        return back();
     }
 }

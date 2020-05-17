@@ -1,11 +1,10 @@
 <x-master>
-    <div class="container mx-auto px-6 py-4 bg-gray-400">
-        <div class="row justify-content-center">
+    <div class="container mx-auto flex justify-center">
+        <div class="px-6 py-4 bg-gray-400 rounded-lg">
             <div class="col-md-8">
-                <div class="card">
+               
                     <div class="font-bold text-lg mb-4">{{ __('Login') }}</div>
     
-                    <div class="card-body">
                         <form method="POST" action="{{ route('login') }}">
                             @csrf
     
@@ -63,8 +62,8 @@
                                 </div>
                             </div>
                         </form>
-                    </div>
-                </div>
+
+                
             </div>
         </div>
     </div>

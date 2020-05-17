@@ -6,12 +6,14 @@
                     name="body" 
                     class="w-full"
                     placeholder="What do you think!!"
+                    required
+                    autofocus
                     
                 ></textarea>
                 
                 <hr class="my-4">
 
-                <footer class="flex justify-between">
+                <footer class="flex justify-between items-center">
                     <img 
                         src="https://picsum.photos/60" 
                         alt="Avatar"
@@ -21,10 +23,10 @@
                     >
 
                     <button 
-                        type="submit" 
-                        class="bg-blue-500 rounded-lg shadow py-4 px-2 text-white"
+                        type="submit"  
+                        class="bg-blue-500 hover:bg-blue-600 rounded-lg shadow px-10 test-sm text-white h-10"
                     >
-                        Tweet a root
+                        Publish
                     </button>
                 </footer>
             </form>
